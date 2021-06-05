@@ -107,6 +107,11 @@ async def version(context):
     myEmbed.set_author(name="Discord Bot")
 
     await context.message.channel.send(embed=myEmbed)
-
+    
+#Sends a private direct message to author of command
+@client.command(name='private')
+async def private(context):
+    await context.message.author.send("Hello in Private!")
+    
 # Run client on server
 client.run('#')
