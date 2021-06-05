@@ -4,6 +4,8 @@ from discord import embeds
 from discord.ext import commands
 import asyncio
 
+import pandas_datareader
+
 import random
 # Client (bot)
 client = commands.Bot(command_prefix='$')
@@ -112,6 +114,22 @@ async def version(context):
 @client.command(name='private')
 async def private(context):
     await context.message.author.send("Hello in Private!")
+    
+#stock prices
+
+def get_stock_price(ticker):
+    data = web.DataReader(ticker, "yahoo")
+    return data['Close'].iloc[-1]
+
+
+@client.event
+async def on_message(message):
+    if message.content.startswith("$stockprice"):
+        if len(message.content.split(" ")) == 2:
+            ticker = message.content.split(" ")[1]
+            price = get_stock_price(ticker)
+            await message.channel.send(f"Stock Price of {ticker} is {price}")
+
     
 # Run client on server
 client.run('#')
